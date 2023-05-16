@@ -9,12 +9,12 @@ const URL = process.env.DB;
 const DB = "realme";
 const io = require('socket.io')(3000, {
   cors: {
-    origin:process.env.CLIENT,
+    origin: "https://neon-otter-16f6a4.netlify.app",
   },
 })
 io.on("connection", socket => {
   socket.on("send-notification", (message) => {
-    socket.emit("recive-notification",message)
+    socket.emit("recive-notification", message)
   })
 })
 
