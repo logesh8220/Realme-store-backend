@@ -13,7 +13,7 @@ const { Server } = require("socket.io");
 const httpServer = http.createServer(app);
 const io = new Server(httpServer, {
   cors: {
-    origin: "https://neon-otter-16f6a4.netlify.app",
+    origin: "*",
   },
 });
 
