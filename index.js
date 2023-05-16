@@ -1,4 +1,5 @@
 const express = require("express");
+const app = express();
 const mongodb = require("mongodb");
 const cors = require("cors");
 const bcrypt = require("bcryptjs");
@@ -7,23 +8,25 @@ const mongoClient = mongodb.MongoClient;
 const dotenv = require("dotenv").config();
 const URL = process.env.DB;
 const DB = "realme";
-const io = require('socket.io')(3000, {
+const http = require("http");
+const { Server } = require("socket.io");
+const httpServer = http.createServer(app);
+const io = new Server(httpServer, {
   cors: {
     origin: "https://neon-otter-16f6a4.netlify.app",
   },
-})
+});
 io.on("connection", socket => {
   socket.on("send-notification", (message) => {
     socket.emit("recive-notification", message)
   })
 })
 
-const app = express();
 
 app.use(express.json());
 app.use(
   cors({
-    origin: "*",
+    origin: "https://neon-otter-16f6a4.netlify.app",
   })
 );
 
