@@ -26,7 +26,7 @@ io.on("connection", socket => {
 app.use(express.json());
 app.use(
   cors({
-    origin: "https://neon-otter-16f6a4.netlify.app",
+    origin: "*",
   })
 );
 
