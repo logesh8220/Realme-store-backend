@@ -7,6 +7,16 @@ const mongoClient = mongodb.MongoClient;
 const dotenv = require("dotenv").config();
 const URL = process.env.DB;
 const DB = "realme";
+const io = require('socket.io')(3000, {
+  cors: {
+    origin: ["https://neon-otter-16f6a4.netlify.app/"],
+  },
+})
+io.on("connection", socket => {
+  socket.on("send-notification", (message) => {
+    socket.emit("recive-notification",message)
+  })
+})
 
 const app = express();
 
@@ -19,7 +29,7 @@ app.use(
 
 
 // Post product
-app.post("/product",  async function (req, res) {
+app.post("/product", async function (req, res) {
   try {
     // Step1: Create a connection between Nodejs and MongoDB
     const connection = await mongoClient.connect(URL);
@@ -42,7 +52,7 @@ app.post("/product",  async function (req, res) {
 });
 
 // Get products
-app.get("/products",  async function (req, res) {
+app.get("/products", async function (req, res) {
   try {
     const connection = await mongoClient.connect(URL);
 
@@ -60,7 +70,7 @@ app.get("/products",  async function (req, res) {
 });
 
 // Get productbyID
-app.get("/product/:id",  async function (req, res) {
+app.get("/product/:id", async function (req, res) {
   try {
     const connection = await mongoClient.connect(URL);
 
@@ -80,7 +90,7 @@ app.get("/product/:id",  async function (req, res) {
 });
 
 //Put product
-app.put("/product/:id",  async function (req, res) {
+app.put("/product/:id", async function (req, res) {
   try {
     const connection = await mongoClient.connect(URL);
 
@@ -103,7 +113,7 @@ app.put("/product/:id",  async function (req, res) {
 });
 
 //Delete product
-app.delete("/product/:id",  async function (req, res) {
+app.delete("/product/:id", async function (req, res) {
   try {
     const connection = await mongoClient.connect(URL);
 
@@ -122,7 +132,7 @@ app.delete("/product/:id",  async function (req, res) {
   }
 });
 
-app.post("/orders",  async function (req, res) {
+app.post("/orders", async function (req, res) {
   try {
     // Step1: Create a connection between Nodejs and MongoDB
     const connection = await mongoClient.connect(URL);
@@ -145,7 +155,7 @@ app.post("/orders",  async function (req, res) {
 });
 
 // Get products
-app.get("/orders",  async function (req, res) {
+app.get("/orders", async function (req, res) {
   try {
     const connection = await mongoClient.connect(URL);
 
@@ -198,7 +208,7 @@ app.post("/login", async function (req, res) {
         let token = jwt.sign({ _id: user._id }, process.env.SECRET, {
           expiresIn: "1h",
         });
-        res.json({ token,user });
+        res.json({ token, user });
       } else {
         res.status(401).json({ message: "Username or Password is incorrect" });
       }
